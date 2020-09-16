@@ -3,22 +3,23 @@ import isEmpty from 'lodash/isEmpty';
 import isFunction from 'lodash/isFunction';
 import isString from 'lodash/isString';
 import conformsTo from 'lodash/conformsTo';
+import has from 'lodash/has';
 
 import checkStore from './checkStore';
 import { DAEMON, ONCE_TILL_UNMOUNT, RESTART_ON_REMOUNT } from './constants';
 
 const allowedModes = [RESTART_ON_REMOUNT, DAEMON, ONCE_TILL_UNMOUNT];
 
-const checkKey = key =>
+const checkKey = (key) =>
   invariant(
     isString(key) && !isEmpty(key),
     '(redux-injectors...) injectSaga: Expected `key` to be a non empty string',
   );
 
-const checkDescriptor = descriptor => {
+const checkDescriptor = (descriptor) => {
   const shape = {
     saga: isFunction,
-    mode: mode => isString(mode) && allowedModes.includes(mode),
+    mode: (mode) => isString(mode) && allowedModes.includes(mode),
   };
   invariant(
     conformsTo(descriptor, shape),
@@ -39,7 +40,7 @@ export function injectSagaFactory(store, isValid) {
     checkKey(key);
     checkDescriptor(newDescriptor);
 
-    let hasSaga = Reflect.has(store.injectedSagas, key);
+    let hasSaga = has(store.injectedSagas, key);
 
     if (process.env.NODE_ENV !== 'production') {
       const oldDescriptor = store.injectedSagas[key];
@@ -70,7 +71,7 @@ export function ejectSagaFactory(store, isValid) {
 
     checkKey(key);
 
-    if (Reflect.has(store.injectedSagas, key)) {
+    if (has(store.injectedSagas, key)) {
       const descriptor = store.injectedSagas[key];
       if (descriptor.mode && descriptor.mode !== DAEMON) {
         descriptor.task.cancel();

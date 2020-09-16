@@ -14,7 +14,7 @@ import { DAEMON, ONCE_TILL_UNMOUNT, RESTART_ON_REMOUNT } from '../constants';
 import { createInjectorsEnhancer } from '../createInjectorsEnhancer';
 
 function configureStore() {
-  const createReducer = () => s => s;
+  const createReducer = () => (s) => s;
   const sagaMiddleware = createSagaMiddleware();
   const runSaga = sagaMiddleware.run;
   const middlewares = [sagaMiddleware];
@@ -53,8 +53,7 @@ describe('injectors', () => {
     });
 
     it('should throw if passed invalid store shape', () => {
-      Reflect.deleteProperty(store, 'dispatch');
-
+      delete store.dispatch;
       expect(() => getInjectors(store)).toThrow();
     });
   });
@@ -73,7 +72,7 @@ describe('injectors', () => {
     });
 
     it('should not check a store if the second argument is true', () => {
-      Reflect.deleteProperty(store, 'dispatch');
+      delete store.dispatch;
       injectSaga('test', { saga: testSaga });
 
       expect(() => ejectSaga('test')).not.toThrow();
@@ -148,8 +147,7 @@ describe('injectors', () => {
     });
 
     it('it should not check a store if the second argument is true', () => {
-      Reflect.deleteProperty(store, 'dispatch');
-
+      delete store.dispatch;
       expect(() => injectSaga('test', { saga: testSaga })).not.toThrow();
     });
 

@@ -60,8 +60,7 @@ describe('reducer injectors', () => {
     });
 
     it('should throw if passed invalid store shape', () => {
-      Reflect.deleteProperty(store, 'dispatch');
-
+      delete store.dispatch;
       expect(() => getInjectors(store)).toThrow();
     });
   });
@@ -79,8 +78,7 @@ describe('reducer injectors', () => {
     });
 
     it('it should not check a store if the second argument is true', () => {
-      Reflect.deleteProperty(store, 'dispatch');
-
+      delete store.dispatch;
       expect(() => injectReducer('test', reducer)).not.toThrow();
     });
 
