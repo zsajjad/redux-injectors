@@ -11,7 +11,7 @@
     "build": "bili --format cjs --format esm",
     "build:docs": "documentation build -f md -o docs/api.md --markdown-toc ./src/index.js --access=public --config documentation.yml",
     "test": "jest",
-    "lint": "eslint ./src",
+    "lint": "eslint ./src --ignore-path ./dist",
     "prettify": "prettier --write",
     "prepublishOnly": "./scripts/check-on-master.sh && npm run test && npm run build"
   },
